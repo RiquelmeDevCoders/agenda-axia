@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda AXIA IMÓVEIS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AXIA IMÓVEIS IMOBILIÁRIOS</h1>
+            <p>Agendamento de Atendimentos</p>
+        </header>
+
+        <main>
+            <section class="calendar-section">
+                <div class="calendar-header">
+                    <button id="prev-month">&lt;</button>
+                    <h2 id="current-month">Mês Ano</h2>
+                    <button id="next-month">&gt;</button>
+                </div>
+                <div id="calendar" class="calendar-grid"></div>
+            </section>
+
+            <section class="booking-form" id="booking-form">
+                <h2>Agendar Atendimento</h2>
+                <form id="appointment-form">
+                    <div class="form-group">
+                        <label for="client-name">Nome Completo:</label>
+                        <input type="text" id="client-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appointment-date">Data:</label>
+                        <input type="text" id="appointment-date" readonly>
+                    </div>
+
+                    <div class="time-group">
+                        <div class="form-group">
+                            <label for="start-time">Hora de Início:</label>
+                            <select id="start-time" required>
+                                <!-- Horários serão preenchidos via JS -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end-time">Previsão de Término:</label>
+                            <select id="end-time" required>
+                                <!-- Horários serão preenchidos via JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Local do Atendimento:</label>
+                        <input type="text" id="location" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service-type">Tipo de Serviço:</label>
+                        <select id="service-type" required>
+                            <option value="">Selecione...</option>
+                            <option value="Foto">Foto</option>
+                            <option value="Filmagem">Filmagem</option>
+                            <option value="Ambos">Foto e Filmagem</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observations">Observações:</label>
+                        <textarea id="observations" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="confirm-btn">Confirmar Agendamento</button>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <p>AXIA IMÓVEIS IMOBILIÁRIOS &copy; <span id="current-year"></span></p>
+            <p class="developer">Desenvolvido por: <a href="https://instagram.com/riquelme.dev" target="_blank">@riquelme.dev</a>.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

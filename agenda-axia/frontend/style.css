@@ -1,0 +1,422 @@
+/* AXIA IMÓVEIS - Estilo Principal
+   Desenvolvido com esquema de cores laranja e branco
+   Fonte principal: Poppins
+   Design moderno e profissional para agendamento
+*/
+
+/* Importação da fonte Poppins do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Paleta de cores principal */
+    --primary-color: #FF7A00;       /* Laranja principal */
+    --primary-light: #FF9934;       /* Laranja claro */
+    --primary-dark: #E66800;        /* Laranja escuro */
+    --white: #FFFFFF;               /* Branco puro */
+    --off-white: #F9F9F9;           /* Off-white para fundos */
+    --gray-light: #EEEEEE;          /* Cinza claro para bordas */
+    --gray-medium: #CCCCCC;         /* Cinza médio para separadores */
+    --gray-dark: #666666;           /* Cinza escuro para textos secundários */
+    --text-color: #333333;          /* Cor principal de texto */
+    --shadow: rgba(0, 0, 0, 0.1);   /* Sombra padrão */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--off-white);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ===== HEADER STYLES ===== */
+header {
+    background: linear-gradient(to right, var(--primary-dark), var(--primary-color));
+    color: var(--white);
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+header p {
+    font-size: 1.2rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+/* ===== CALENDAR SECTION ===== */
+.calendar-section {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 3px 10px var(--shadow);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header button {
+    background-color: var(--white);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.calendar-header button:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.calendar-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+/* Estilização para ser aplicada via JavaScript aos dias do calendário */
+.calendar-grid .day {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.calendar-grid .day:hover {
+    background-color: var(--gray-light);
+}
+
+.calendar-grid .selected {
+    background-color: var(--primary-color) !important;
+    color: var(--white) !important;
+}
+
+.calendar-grid .today {
+    border: 2px solid var(--primary-color);
+    font-weight: 600;
+}
+
+.calendar-grid .disabled {
+    color: var(--gray-medium);
+    cursor: not-allowed;
+}
+
+.calendar-grid .weekday-header {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* ===== BOOKING FORM ===== */
+.booking-form {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 3px 10px var(--shadow);
+}
+
+.booking-form h2 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--gray-medium);
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    color: var(--text-color);
+    background-color: var(--off-white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.time-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Estilização do botão de confirmação */
+.confirm-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 6px rgba(255, 122, 0, 0.3);
+}
+
+.confirm-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* ===== FOOTER STYLES ===== */
+footer {
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    padding: 25px 0;
+    border-radius: 10px 10px 0 0;
+    margin-top: 20px;
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+footer .developer {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+footer a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.3s ease;
+}
+
+footer a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.hidden {
+    display: none !important;
+}
+
+/* Animações para transições suaves */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* MEDIA QUERIES PARA DISPOSITIVOS MÓVEIS
+   Adaptações para responsividade perfeita
+   Breakpoints principais: 
+   - Smartphones: max-width: 767px
+   - Tablets pequenos: min-width: 768px e max-width: 991px
+*/
+
+@media screen and (max-width: 991px) {
+    main {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .calendar-section, .booking-form {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    /* Estilizações específicas para smartphones */
+    
+    /* Ajustes gerais */
+    header {
+        padding: 30px 15px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    /* Calendário */
+    .calendar-section {
+        padding: 15px;
+        overflow-x: hidden;
+    }
+    
+    .calendar-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .calendar-grid {
+        gap: 5px;
+    }
+    
+    .calendar-grid .day {
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    /* Formulário */
+    .booking-form {
+        padding: 20px 15px;
+    }
+    
+    .booking-form h2 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .time-group {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    .confirm-btn {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+    
+    /* Footer */
+    footer {
+        padding: 20px 0;
+    }
+    
+    footer p {
+        font-size: 12px;
+    }
+    
+    footer .developer {
+        font-size: 11px;
+    }
+}
+
+/* Ajustes para dispositivos muito pequenos */
+@media screen and (max-width: 400px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .calendar-grid .day {
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    
+    .calendar-header button {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+}
+
+/* Orientação paisagem em dispositivos móveis */
+@media screen and (max-width: 767px) and (orientation: landscape) {
+    main {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .calendar-grid .day {
+        height: 28px;
+    }
+}
