@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const endTimeEl = document.getElementById('end-time');
     const currentYearEl = document.getElementById('current-year');
 
+    // URL da API no Render
+    const API_BASE_URL = "https://agenda-axia.onrender.com";
+
     // Variáveis de estado
     let currentDate = new Date();
     let selectedDate = null;
@@ -44,9 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderCalendar() {
-
         calendarEl.innerHTML = '';
-
 
         const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         daysOfWeek.forEach(day => {
@@ -56,12 +57,10 @@ document.addEventListener('DOMContentLoaded', function () {
             calendarEl.appendChild(dayHeader);
         });
 
-
         currentMonthEl.textContent = new Intl.DateTimeFormat('pt-BR', {
             month: 'long',
             year: 'numeric'
         }).format(currentDate).replace(/de /g, '').replace(/ /g, ' ');
-
 
         const firstDayOfMonth = new Date(
             currentDate.getFullYear(),
@@ -69,33 +68,24 @@ document.addEventListener('DOMContentLoaded', function () {
             1
         );
 
-
         const lastDayOfMonth = new Date(
             currentDate.getFullYear(),
             currentDate.getMonth() + 1,
             0
         );
 
-
         const startingDayOfWeek = firstDayOfMonth.getDay();
-
-
         const endingDayOfWeek = lastDayOfMonth.getDay();
-
-
         const totalDays = lastDayOfMonth.getDate() + startingDayOfWeek + (6 - endingDayOfWeek);
-
 
         const today = new Date();
         const isCurrentMonth = today.getFullYear() === currentDate.getFullYear() &&
             today.getMonth() === currentDate.getMonth();
 
-
         for (let i = 0; i < totalDays; i++) {
             const dayEl = document.createElement('div');
             dayEl.className = 'day';
 
-            // Dias do mês anterior
             if (i < startingDayOfWeek) {
                 const prevMonthDay = new Date(
                     currentDate.getFullYear(),
@@ -109,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 continue;
             }
 
-            // Dias do mês atual
             const dayNumber = i - startingDayOfWeek + 1;
             if (dayNumber <= lastDayOfMonth.getDate()) {
                 const date = new Date(
@@ -133,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 continue;
             }
 
-            // Dias do próximo mês
             const nextMonthDay = new Date(
                 currentDate.getFullYear(),
                 currentDate.getMonth() + 1,
@@ -149,13 +137,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function selectDate(dayEl, date, dateString, isBooked) {
         if (isBooked) return;
 
-        // Remove a seleção anterior
         const previouslySelected = document.querySelector('.day.selected');
         if (previouslySelected) {
             previouslySelected.classList.remove('selected');
         }
 
-        // Adiciona a nova seleção
         dayEl.classList.add('selected');
         selectedDate = date;
         appointmentDateEl.value = new Intl.DateTimeFormat('pt-BR', {
@@ -201,15 +187,14 @@ document.addEventListener('DOMContentLoaded', function () {
             service: document.getElementById('service-type').value
         };
 
-        // Validações básicas
         if (!formData.client || !formData.start || !formData.end || !formData.location || !formData.service) {
             alert('Por favor, preencha todos os campos.');
             return;
         }
 
         try {
-            // 1. Tenta reservar no servidor
-            const response = await fetch('http://localhost:3001/api/book-appointment', {
+            // Chamada para a API no Render
+            const response = await fetch(`${API_BASE_URL}/api/book-appointment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -221,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error(result.error || 'Erro ao agendar');
             }
 
-            // 2. Se reservado com sucesso, redireciona para WhatsApp
+            // Redirecionamento para WhatsApp
             const whatsappMessage = `Olá AXIA IMÓVEIS, confirmo meu agendamento:%0A%0A` +
                 `📅 Data: ${appointmentDateEl.value}%0A` +
                 `⏰ Horário: ${formData.start} às ${formData.end}%0A` +
@@ -232,12 +217,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             window.open(`https://wa.me/5581985546267?text=${whatsappMessage}`, '_blank');
 
-            // 3. Limpa o formulário
+            // Limpeza do formulário
             appointmentForm.reset();
             appointmentDateEl.value = '';
             selectedDate = null;
 
-            // 4. Atualiza calendário
+            // Atualização do calendário
             await updateCalendar();
 
         } catch (error) {
@@ -246,12 +231,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function updateCalendar() {
-        // Busca slots disponíveis do servidor
         const dateStr = selectedDate ? formatDate(selectedDate) : '';
-        const response = await fetch(`http://localhost:3001/api/available-slots?date=${dateStr}`);
+        const response = await fetch(`${API_BASE_URL}/api/available-slots?date=${dateStr}`);
         const availableSlots = await response.json();
+        
+        // Aqui você pode implementar a atualização da UI com os slots disponíveis
+        console.log('Slots disponíveis:', availableSlots);
+    }
 
-        // Atualiza a UI conforme os slots disponíveis
-        // (Implemente esta lógica conforme sua interface)
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 });
