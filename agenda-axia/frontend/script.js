@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     // Elementos do DOM
     const calendarEl = document.getElementById('calendar');
     const currentMonthEl = document.getElementById('current-month');
@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Variáveis de estado
     let currentDate = new Date();
     let selectedDate = null;
-    let bookedDates = JSON.parse(localStorage.getItem('bookedDates')) || [];
 
     // Inicialização
     updateCurrentYear();
@@ -108,16 +107,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
                 const dateString = formatDate(date);
-                const isBooked = bookedDates.includes(dateString);
                 const isToday = isCurrentMonth && dayNumber === today.getDate();
 
                 if (isToday) dayEl.classList.add('today');
-                if (isBooked) dayEl.classList.add('booked');
 
                 dayEl.innerHTML = `<span class="day-number">${dayNumber}</span>`;
                 dayEl.dataset.date = dateString;
 
-                dayEl.addEventListener('click', () => selectDate(dayEl, date, dateString, isBooked));
+                dayEl.addEventListener('click', () => selectDate(dayEl, date, dateString));
                 calendarEl.appendChild(dayEl);
                 continue;
             }
@@ -134,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function selectDate(dayEl, date, dateString, isBooked) {
-        if (isBooked) return;
+    function selectDate(dayEl, date, dateString) {
+        if (dayEl.classList.contains('disabled')) return;
 
         const previouslySelected = document.querySelector('.day.selected');
         if (previouslySelected) {
@@ -184,59 +181,38 @@ document.addEventListener('DOMContentLoaded', function () {
             end: endTimeEl.value,
             client: document.getElementById('client-name').value.trim(),
             location: document.getElementById('location').value.trim(),
-            service: document.getElementById('service-type').value
+            service: document.getElementById('service-type').value,
+            observations: document.getElementById('observations').value.trim()
         };
 
+        // Validações básicas
         if (!formData.client || !formData.start || !formData.end || !formData.location || !formData.service) {
-            alert('Por favor, preencha todos os campos.');
+            alert('Por favor, preencha todos os campos obrigatórios.');
             return;
         }
 
-        try {
-            // Chamada para a API no Render
-            const response = await fetch(`${API_BASE_URL}/api/book-appointment`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
+        // Cria a mensagem do WhatsApp
+        const whatsappMessage = `Olá AXIA IMÓVEIS, confirmo meu agendamento:\n\n` +
+            `📅 Data: ${appointmentDateEl.value}\n` +
+            `⏰ Horário: ${formData.start} às ${formData.end}\n` +
+            `📍 Local: ${formData.location}\n` +
+            `📸 Serviço: ${formData.service}\n` +
+            `👤 Cliente: ${formData.client}` +
+            (formData.observations ? `\n📝 Observações: ${formData.observations}` : '') +
+            `\n\nPor favor, confirmem recebimento.`;
 
-            const result = await response.json();
+        // Cria o link do WhatsApp
+        const whatsappUrl = `https://wa.me/5581985546267?text=${encodeURIComponent(whatsappMessage)}`;
 
-            if (!response.ok) {
-                throw new Error(result.error || 'Erro ao agendar');
-            }
+        // Redireciona diretamente (solução mais confiável para Netlify)
+        window.location.href = whatsappUrl;
 
-            // Redirecionamento para WhatsApp
-            const whatsappMessage = `Olá AXIA IMÓVEIS, confirmo meu agendamento:%0A%0A` +
-                `📅 Data: ${appointmentDateEl.value}%0A` +
-                `⏰ Horário: ${formData.start} às ${formData.end}%0A` +
-                `📍 Local: ${formData.location}%0A` +
-                `📸 Serviço: ${formData.service}%0A` +
-                `👤 Cliente: ${formData.client}%0A` +
-                `%0APor favor, confirmem recebimento.`;
-
-            window.open(`https://wa.me/5581985546267?text=${whatsappMessage}`, '_blank');
-
-            // Limpeza do formulário
+        // Limpa o formulário (executará se o redirecionamento falhar)
+        setTimeout(() => {
             appointmentForm.reset();
             appointmentDateEl.value = '';
             selectedDate = null;
-
-            // Atualização do calendário
-            await updateCalendar();
-
-        } catch (error) {
-            alert(error.message);
-        }
-    }
-
-    async function updateCalendar() {
-        const dateStr = selectedDate ? formatDate(selectedDate) : '';
-        const response = await fetch(`${API_BASE_URL}/api/available-slots?date=${dateStr}`);
-        const availableSlots = await response.json();
-        
-        // Aqui você pode implementar a atualização da UI com os slots disponíveis
-        console.log('Slots disponíveis:', availableSlots);
+        }, 1000);
     }
 
     function formatDate(date) {
