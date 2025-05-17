@@ -3,13 +3,26 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+
+// Configuração específica do CORS
+const corsOptions = {
+  origin: [
+    'https://agenda-axia-imoveis.netlify.app', // Seu domínio no Netlify
+    'http://localhost:3000' // Para desenvolvimento local
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions)); // Aplica as configurações personalizadas
 app.use(bodyParser.json());
 
 // Armazenamento em memória (substitua por banco de dados depois)
 let appointments = [];
 
 // Rotas
+app.options('*', cors(corsOptions)); // Habilita preflight para todas as rotas
+
 app.get('/api/available-slots', (req, res) => {
     const { date } = req.query;
     const slots = generateTimeSlots();
@@ -57,4 +70,5 @@ function generateTimeSlots() {
     return slots;
 }
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
